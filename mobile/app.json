@@ -46,8 +46,9 @@
     ],
     "extra": {
       "eas": {
-        "projectId": "your-eas-project-id"
+        "projectId": "9fc78f00-667a-43be-90b7-fb490ba7b311"
       }
-    }
+    },
+    "owner": "faizan_mujahid"
   }
 }
