@@ -158,8 +158,8 @@ export default function AdminStudentsPage() {
     const a = document.createElement('a'); a.href = url; a.download = 'students.csv'; a.click();
   };
 
-  const semesters = [...new Set(students.map(s => String(s.semester)))].sort();
-  const sections = [...new Set(students.map(s => s.section ?? ''))].filter(Boolean).sort();
+  const semesters = Array.from(new Set(students.map(s => String(s.semester)))).sort();
+  const sections = Array.from(new Set(students.map(s => s.section ?? ''))).filter(Boolean).sort();
 
   return (
     <div className="p-8 space-y-6">
