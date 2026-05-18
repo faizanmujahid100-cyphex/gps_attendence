@@ -1,0 +1,81 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function isAdmin() {
+      return get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'admin';
+    }
+
+    function isTeacher() {
+      return get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'teacher';
+    }
+
+    function isStudent() {
+      return get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'student';
+    }
+
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+
+    // Admin: full access to everything
+    match /{document=**} {
+      allow read, write: if isAuthenticated() && isAdmin();
+    }
+
+    // Users collection
+    match /users/{uid} {
+      allow read: if isAuthenticated() && (request.auth.uid == uid || isAdmin() || isTeacher());
+      allow write: if isAuthenticated() && isAdmin();
+    }
+
+    // Geofence: authenticated users read, admin write
+    match /geofence_settings/{docId} {
+      allow read: if isAuthenticated();
+      allow write: if isAuthenticated() && isAdmin();
+    }
+
+    // Schedules: teachers/admin write, authenticated read
+    match /schedules/{docId} {
+      allow read: if isAuthenticated();
+      allow write: if isAuthenticated() && (isAdmin() || isTeacher());
+    }
+
+    // Attendance Sessions: teachers manage, students read
+    match /attendance_sessions/{docId} {
+      allow read: if isAuthenticated();
+      allow create, update: if isAuthenticated() && (isAdmin() || isTeacher());
+      allow delete: if isAuthenticated() && isAdmin();
+    }
+
+    // Attendance Records: students create own, teachers update, admin full access
+    match /attendance_records/{docId} {
+      allow read: if isAuthenticated() && (
+        isAdmin() ||
+        isTeacher() ||
+        resource.data.studentUid == request.auth.uid
+      );
+      allow create: if isAuthenticated() && (
+        isAdmin() ||
+        isTeacher() ||
+        (isStudent() && request.resource.data.studentUid == request.auth.uid)
+      );
+      allow update: if isAuthenticated() && (isAdmin() || isTeacher());
+      allow delete: if isAuthenticated() && isAdmin();
+    }
+
+    // Complaints: students CRUD own, admin read/update all
+    match /complaints/{docId} {
+      allow read: if isAuthenticated() && (
+        isAdmin() ||
+        resource.data.studentUid == request.auth.uid
+      );
+      allow create: if isAuthenticated() && (
+        isStudent() &&
+        request.resource.data.studentUid == request.auth.uid
+      );
+      allow update: if isAuthenticated() && isAdmin();
+      allow delete: if isAuthenticated() && isAdmin();
+    }
+  }
+}
