@@ -5,6 +5,10 @@
     "version": "1.0.0",
     "orientation": "portrait",
     "userInterfaceStyle": "light",
+    "splash": {
+      "resizeMode": "contain",
+      "backgroundColor": "#1e40af"
+    },
     "ios": {
       "supportsTablet": false,
       "bundleIdentifier": "pk.edu.gigccl.attendance"
