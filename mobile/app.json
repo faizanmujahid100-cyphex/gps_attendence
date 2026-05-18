@@ -4,28 +4,20 @@
     "slug": "gigccl-attendance",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
-    "splash": {
-      "image": "./assets/splash.png",
-      "resizeMode": "contain",
-      "backgroundColor": "#1e40af"
-    },
     "ios": {
       "supportsTablet": false,
       "bundleIdentifier": "pk.edu.gigccl.attendance"
     },
     "android": {
+      "package": "pk.edu.gigccl.attendance",
       "adaptiveIcon": {
-        "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#1e40af"
       },
-      "package": "pk.edu.gigccl.attendance",
       "permissions": [
         "android.permission.ACCESS_FINE_LOCATION",
         "android.permission.ACCESS_COARSE_LOCATION",
         "android.permission.INTERNET",
-        "android.permission.RECEIVE_BOOT_COMPLETED",
         "android.permission.VIBRATE"
       ]
     },
@@ -34,13 +26,6 @@
         "expo-location",
         {
           "locationAlwaysAndWhenInUsePermission": "GIGCCL Attendance needs your location to verify you are on campus."
-        }
-      ],
-      [
-        "expo-notifications",
-        {
-          "icon": "./assets/notification-icon.png",
-          "color": "#1e40af"
         }
       ]
     ],
