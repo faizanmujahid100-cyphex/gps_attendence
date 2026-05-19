@@ -9,7 +9,7 @@ import AppNavigator from './src/navigation/AppNavigator';
 import type { User } from './src/types';
 
 export default function App() {
-  const { setUser, clearUser, setLoading } = useAuthStore();
+  const { setUser, clearUser } = useAuthStore();
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
@@ -18,7 +18,12 @@ export default function App() {
           const snap = await getDoc(doc(db, 'users', firebaseUser.uid));
           if (snap.exists()) {
             const userData = snap.data() as Omit<User, 'uid'>;
-            setUser({ uid: firebaseUser.uid, ...userData });
+            if (userData.role === 'student' && userData.isActive) {
+              setUser({ uid: firebaseUser.uid, ...userData });
+            } else {
+              await auth.signOut();
+              clearUser();
+            }
           } else {
             clearUser();
           }
