@@ -1,6 +1,9 @@
 import 'react-native-gesture-handler';
 import React, { useEffect } from 'react';
+import { StyleSheet } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { onAuthStateChanged } from 'firebase/auth';
 import { doc, getDoc } from 'firebase/firestore';
 import { auth, db } from './src/lib/firebase';
@@ -38,9 +41,15 @@ export default function App() {
   }, [setUser, clearUser]);
 
   return (
-    <>
-      <StatusBar style="light" backgroundColor="#1e40af" />
-      <AppNavigator />
-    </>
+    <GestureHandlerRootView style={styles.root}>
+      <SafeAreaProvider>
+        <StatusBar style="light" backgroundColor="#1e40af" />
+        <AppNavigator />
+      </SafeAreaProvider>
+    </GestureHandlerRootView>
   );
 }
+
+const styles = StyleSheet.create({
+  root: { flex: 1 },
+});

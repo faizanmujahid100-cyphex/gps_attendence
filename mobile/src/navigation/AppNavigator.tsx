@@ -1,8 +1,8 @@
 import React from 'react';
+import { View, ActivityIndicator, Text, StyleSheet } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
-import { createStackNavigator } from '@react-navigation/stack';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { View, Text, ActivityIndicator } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useAuthStore } from '../store/authStore';
 import LoginScreen from '../screens/LoginScreen';
@@ -12,7 +12,7 @@ import ProfileScreen from '../screens/ProfileScreen';
 import ComplaintsScreen from '../screens/ComplaintsScreen';
 import type { RootStackParamList, MainTabParamList } from '../types';
 
-const Stack = createStackNavigator<RootStackParamList>();
+const Stack = createNativeStackNavigator<RootStackParamList>();
 const Tab = createBottomTabNavigator<MainTabParamList>();
 
 function MainTabs() {
@@ -53,9 +53,9 @@ export default function AppNavigator() {
 
   if (loading) {
     return (
-      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: '#1e40af' }}>
-        <ActivityIndicator size="large" color="#ffffff" />
-        <Text style={{ color: '#ffffff', marginTop: 16, fontSize: 14 }}>Loading...</Text>
+      <View style={styles.loading}>
+        <ActivityIndicator size="large" color="#1e40af" />
+        <Text style={styles.loadingText}>Loading...</Text>
       </View>
     );
   }
@@ -72,3 +72,17 @@ export default function AppNavigator() {
     </NavigationContainer>
   );
 }
+
+const styles = StyleSheet.create({
+  loading: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#1e40af',
+  },
+  loadingText: {
+    color: '#ffffff',
+    marginTop: 16,
+    fontSize: 14,
+  },
+});
